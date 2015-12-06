@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=1024" />
+      <title>Computer Vision - Project Presentation</title>
+      <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic|Titillium+Web:400,900" rel="stylesheet" />
+      <link href="style.css" rel="stylesheet" />
+      <link rel="shortcut icon" href="favicon.png" />
+      <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  </head>
+  <body class="impress-not-supported">
+    <div class="fallback-message">
+        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+        <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+    </div>
+    <div id="impress">
+        <div id="title" class="step" data-x="0" data-y="0">
+          <h1>Computer Vision</h1>
+          <h2>Chess Piece Recognition</h2>
+          <h3>Brandon Boos and Guilherme Meira<br/>Group E</h3>
+        </div>
+        <div id="problem" class="step" data-x="1500" data-y="0">
+          <h1>The problem</h1>
+          <ul>
+            <li>Detect black chess pieces on an image</li>
+            <li>Various different approaches are available</li>
+          </ul>
+        </div> 
+        <div id="color-based" class="step" data-x="1275" data-y="100" data-scale="0.4">
+          <h1>Color thresholding</h1>
+          <img src="color-thresh.jpg"/>
+          <ul class="future-hidden">
+            <li>Detect black blobs</li>
+            <li>Simple implementation</li>
+          </ul>
+          <p class="future-hidden">Can't tell the difference between pieces</p>
+        </div>
+        <div id="feature-based" class="step" data-x="1725" data-y="100" data-scale="0.4">
+          <h1>Feature matching</h1>
+          <img src="feature-match.jpg"/>
+          <ul class="future-hidden">
+            <li>Good algorithms for textured objects</li>
+            <li>SIFT, SURF, ORB</li>
+          </ul>
+          <p class="future-hidden">Our objects don't have textures</p>
+        </div>
+        <div id="bold" class="step" data-x="3000" data-y="0">
+          <h1>B.O.L.D.</h1>
+          <h2>Bunch of Lines Descriptor</h2>
+          <p class="past-hidden"> F. Tombari, A. Franchi, L. Di Stefano, “BOLD features to detect texture-less objects”, ICCV 2013</p>
+        </div>
+        <div id="bold-features" class="step" data-x="3600" data-y="500" data-scale="2">
+          <ul class="future-hidden">
+            <li>Developed for textureless objects</li>
+            <li>Also performs well on textured objects</li>
+            <li>Closed source implementation available upon request</li>
+            <li>We developed our own implementation with OpenCV</li>
+          </ul>
+        </div>
+        <div id="bold-overview" class="step" data-x="5000" data-y="1000" data-z="3800" data-rotate-y="-90" data-scale="4.3">
+        </div>
+        <div id="bold-model" class="bold-step step" data-x="5000" data-y="0" data-z="2000" data-rotate-y="-90">
+          <h1>Model image</h1>
+          <img class="bold-img" src="model.jpg"/>
+          <ul class="future-hidden">
+            <li>Captured on a white background</li>
+          </ul>
+          <img class="bold-arrow-east" src="arrow2.png"/>
+        </div>
+        <div id="bold-preprocessing" class="bold-step step" data-x="5000" data-y="0" data-z="3500" data-rotate-y="-90">
+          <h1>Preprocessing</h1>
+          <img class="bold-img" src="grayscale.png"/>
+          <ul class="future-hidden">
+            <li>Convert to grayscale</li>
+            <li>Gaussian blur to remove some noise</li>
+          </ul>
+          <img class="bold-arrow-east" src="arrow2.png"/>
+        </div>
+        <div id="bold-pyramid" class="bold-step step" data-x="5000" data-y="0" data-z="5000" data-rotate-y="-90">
+          <h1>Pyramid</h1>
+          <img class="bold-img" src="pyramid.png"/>
+          <ul class="future-hidden">
+            <li>Capture features on different scales</li>
+          </ul>
+          <img class="bold-arrow-southwest" src="arrow2.png"/>
+          <img class="bold-arrow-southeast" src="arrow2.png"/>
+        </div>
+        <div id="bold-gradient" class="bold-step step" data-x="5000" data-y="1000" data-z="4250" data-rotate-y="-90">
+          <h1>Gradient</h1>
+          <img class="bold-img" src="gradient.png"/>
+          <ul class="future-hidden">
+            <li>Compute the \(x\) and \(y\) gradients (derivatives)</li>
+            <li>We use the Scharr kernel</li>
+            <p style="margin-left: -50px; text-align: left">\(G_{x} = \begin{bmatrix}-3 & 0 & 3 \\ -10 & 0 & 10 \\ -3 & 0 & 3\end{bmatrix} G_{y} = \begin{bmatrix}-1 & -10 & -3 \\ 0 & 0 & 0 \\ 3 & 10 & 3\end{bmatrix}\)</p>
+          </ul>
+          <img class="bold-arrow-south" src="arrow2.png"/>
+        </div>
+        <div id="bold-line" class="bold-step step" data-x="5000" data-y="1000" data-z="5550" data-rotate-y="-90">
+          <h1>Line extraction</h1>
+          <img class="bold-img" src="lines.png"/>
+          <ul class="future-hidden">
+            <li>Find lines on the object</li>
+            <li>We use the LSD algorithm from OpenCV</li>
+          </ul>
+          <img class="bold-arrow-south" src="arrow2.png"/>
+        </div>
+        <div id="bold-knn" class="bold-step step" data-x="5000" data-y="2200" data-z="5550" data-rotate-y="-90">
+          <h1>Nearest neighbor search</h1>
+          <img class="bold-img" src="knn.png"/>
+          <ul class="future-hidden">
+            <li>For each line, find \(k\) closest lines</li>
+            <li>We use FLANN for the \(k\)-nearest neighbor search</li>
+            <li>We can use multiple \(k\)s</li>
+            <li>For each pair of lines, compute \(\alpha\) and \(\beta\)</li>
+          </ul>
+          <img class="bold-arrow-west" src="arrow2.png"/>
+        </div>
+        <div id="bold-alphabeta" class="bold-step step" data-x="5000" data-y="2200" data-z="4200" data-rotate-y="-90">
+          <h1>BOLD descriptors</h1>
+          <img id="bold-diagram" src="bold.png"/>
+          <p class="future-hidden">$$
+          \begin{matrix}
+          \vec{t}_{i\,j} = \vec{m}_{j}-\vec{m}_{i} & sign(\vec{s}_{i}) = \frac{(\vec{e}_{i\,2}-\vec{e}_{i\,1})\times \vec{g}(\vec{m}_{i})}{|(\vec{e}_{i\,2}-\vec{e}_{i\,1})\times \vec{g}(\vec{m}_{i})|}\cdot \vec{n}\\
+          \vec{t}_{j\,i} = \vec{m}_{i}-\vec{m}_{j} & \vec{s}_{i} = sign(\vec{s}_{i})\cdot(\vec{e}_{i\,2}-\vec{e}_{i\,1})
+          \end{matrix}
+          $$</p>
+        </div>
+        <div id="bold-alphabeta2" class="bold-step step" data-x="5000" data-y="2200" data-z="3900" data-rotate-y="-90">
+          <p class="future-hidden" style="text-align: left">\(
+          \begin{matrix}
+          \alpha^{*} = arccos\left(\frac{\vec{s}_{i}\cdot \vec{t}_{i\,j}}{|\vec{s}_{i}|\cdot|\vec{t}_{i\,j}|}\right) \\
+          \beta^{*} = arccos\left(\frac{\vec{s}_{j}\cdot \vec{t}_{j\,i}}{|\vec{s}_{j}|\cdot|\vec{t}_{j\,i}|}\right) \\
+          \alpha = \begin{cases}
+            \alpha^{*} & \frac{\vec{s}_{i}\times\vec{t}_{i\,j}}{|\vec{s}_{i}\times\vec{t}_{i\,j}|}\cdot\vec{n} = 1 \\
+            2\,\pi-\alpha^{*} & otherwise
+          \end{cases} \\
+          \beta = \begin{cases}
+            \beta^{*} & \frac{\vec{s}_{j}\times\vec{t}_{j\,i}}{|\vec{s}_{j}\times\vec{t}_{j\,i}|}\cdot\vec{n} = 1 \\
+            2\,\pi-\beta^{*} & otherwise
+          \end{cases}
+          \end{matrix}
+          \)</p>
+          <img class="bold-arrow-west" src="arrow2.png"/>
+        </div>
+        <div id="bold-histogram" class="bold-step step" data-x="5000" data-y="2200" data-z="2600" data-rotate-y="-90">
+          <h1>Histogram</h1>
+          <img id="bold-histogram-pic" src="histogram.png"/>
+          <ul class="future-hidden">
+            <li>\(\alpha\) and \(\beta\) values are accumulated into 2D histograms</li>
+            <li>Values are added to the histogram using interpolation</li>
+            <li>One histogram is produced for each detected line</li>
+            <li>Histogram is converted to a feature vector</li>
+          </ul>
+          <img class="bold-arrow-north" src="arrow2.png"/>
+        </div>
+        <div id="bold-done" class="step" data-x="5000" data-y="1000" data-z="2600" data-rotate-y="-90">
+          <img src="bold-feature.png" id="bold-feature-balloon"/>
+        </div>
+        <div id="bold-overview-2" class="step" data-x="5000" data-y="1000" data-z="3800" data-rotate-y="-90" data-scale="4.3">
+        </div>
+        <div id="matching-overview" class="step" data-x="1000" data-y="1200" data-z="6500" data-rotate-y="-180" data-scale="4.3">
+        </div>
+        <div id="matching-model" class="bold-step step" data-x="3000" data-y="0" data-z="6500" data-rotate-y="-180">
+          <h1>Model image</h1>
+          <img class="matching-img" src="model.jpg"/>
+          <img class="bold-arrow-east" src="arrow2.png"/>
+          <img class="bold-arrow-southeast" src="arrow2.png"/>
+        </div>
+        <div id="matching-model-features" class="bold-step step" data-x="2500" data-y="1000" data-z="6500" data-rotate-y="-180">
+          <img class="matching-features-img" src="features-model.png"/>
+        </div>
+        <div id="matching-model-refpt" class="bold-step step" data-x="1500" data-y="0" data-z="6500" data-rotate-y="-180">
+          <h1>Pick a reference point</h1>
+          <img class="bold-img" src="reference.png"/>
+          <ul class="future-hidden">
+            <li>Any point should work</li>
+            <li>It's preferable to pick a point inside the object</li>
+            <li>We simply average the midpoints of the detected lines</li>
+          </ul>
+          <img class="bold-arrow-east" src="arrow2.png"/>
+        </div>
+        <div id="matching-model-rtable" class="bold-step step" data-x="0" data-y="0" data-z="6500" data-rotate-y="-180">
+          <h1>Build the R-table</h1>
+          <img src="rtable.png"/>
+          <img class="bold-arrow-southwest" src="arrow2.png"/>
+        </div>
+        <div id="matching-scene" class="bold-step step" data-x="3000" data-y="2500" data-z="6500" data-rotate-y="-180">
+          <h1>Scene image</h1>
+          <img class="matching-scene-img" src="scene.jpg"/>
+          <img class="bold-arrow-northeast" src="arrow2.png"/>
+        </div>
+        <div id="matching-scene-features" class="bold-step step" data-x="2500" data-y="1600" data-z="6500" data-rotate-y="-180">
+          <img class="matching-features-img" src="features-scene.png"/>
+        </div>
+        <div id="matching-process-1" class="bold-step step" data-x="1200" data-y="1200" data-z="6500" data-rotate-y="-180">
+          <h1>Matching process</h1>
+          <img id="matching-distance" src="match-distance.png"/>
+          <ul>
+            <li>The match is considered valid if \(\frac{d_{1}}{d_{2}} < 0.8\)</li>
+          </ul>
+          <img class="bold-arrow-east-inverted" src="arrow2.png"/>
+        </div>
+        <div id="matching-process-2" class="bold-step step" data-x="200" data-y="1200" data-z="6500" data-rotate-y="-180">
+          <img id="matching-hough" src="hough.png"/>
+        </div>
+        <div id="matching-process-3" class="bold-step step" data-x="-700" data-y="1200" data-z="6500" data-rotate-y="-180">
+          <img id="matching-rigid" src="rigid.png"/>
+          <ul>
+            <li>The rotation and scaling that are closest to the ones found on the Hough Matrix are considered the correct ones</li>
+          </ul>
+          <img class="bold-arrow-south" src="arrow2.png"/>
+        </div>
+        <div id="matching-result" class="bold-step step" data-x="-700" data-y="2500" data-z="6500" data-rotate-y="-180">
+          <h1>Result</h1>
+          <img id="matching-result" src="result.png"/>
+        </div>
+        <div id="matching-overview-2" class="step" data-x="1000" data-y="1200" data-z="6500" data-rotate-y="-180" data-scale="4.3">
+        </div>
+        <div id="results-1" class="bold-step step" data-x="-4000" data-y="0" data-z="4250" data-rotate-y="-270">
+          <h1>Differentiating objects</h1>
+          <img id="matching-result" src="results1.png"/>
+        </div>
+        <div id="results-2" class="bold-step step" data-x="-4000" data-y="0" data-z="3250" data-rotate-y="-270">
+          <h1>90-degree rotation</h1>
+          <img id="matching-result" src="results2.png"/>
+        </div>
+        <div id="results-3" class="bold-step step" data-x="-4000" data-y="0" data-z="2250" data-rotate-y="-270">
+          <h1>Multiple rotated objects<h1>
+          <img id="matching-result" src="results3.png"/>
+        </div>
+        <div id="results-4" class="bold-step step" data-x="-4000" data-y="700" data-z="3250" data-rotate-y="-270">
+          <h1>Rotation and occlusion</h1>
+          <img id="matching-result" src="results4.png"/>
+        </div>
+        <div id="results-5" class="bold-step step" data-x="-4000" data-y="1400" data-z="3250" data-rotate-y="-270">
+          <h1>Not always perfect</h1>
+          <img id="matching-result" src="results5.png"/>
+        </div>
+        <div id="results-6" class="bold-step step" data-x="-4000" data-y="2100" data-z="3250" data-rotate-y="-270">
+          <h1>Rotation, occlusion, multiple objects...</h1>
+          <img id="matching-result" src="results6.png"/>
+        </div>
+        <div id="thank-you" class="step" data-x="-4000" data-y="1400" data-z="2500" data-rotate-y="-270" data-scale="4.5">
+          <p id="thank-you-text" class="future-hidden">hank You!</p>
+        </div>
+    </div>
+    <script src="impress.js"></script>
+    <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+    impress().init();
+    MathJax.Hub.Config({
+      "HTML-CSS": {
+        scale: 60
+      }
+    });
+    </script>
+  </body>
+</html>
